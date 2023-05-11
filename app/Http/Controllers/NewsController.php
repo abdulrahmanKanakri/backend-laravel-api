@@ -14,9 +14,11 @@ class NewsController extends Controller
 
     public function index(Request $request)
     {
+        // validate page => positive int
         $keyword = $request->keyword ?? '';
+        $page = $request->page ?? 0;
 
-        $news = $this->newsSource->fetchNewsList($keyword);
+        $news = $this->newsSource->fetchNewsList($keyword, $page);
 
         return ApiResponse::success($news, 'Successfully retrieved');
     }

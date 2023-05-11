@@ -12,9 +12,9 @@ class NewYorkTimesSource implements INewsSource
     {
     }
 
-    public function fetchNewsList(string $keyword = ''): array
+    public function fetchNewsList(string $keyword = '', int $page = 0): array
     {
-        $response = $this->handleRequest($keyword);
+        $response = $this->handleRequest($keyword, $page);
 
         if ($response->ok()) {
             $docs = $response->json()["response"]["docs"] ?? [];
@@ -24,13 +24,13 @@ class NewYorkTimesSource implements INewsSource
         return [];
     }
 
-    private function handleRequest(string $keyword = '')
+    private function handleRequest(string $keyword = '', int $page = 0)
     {
         return Http::get($this->endpoint, [
             'api-key' => $this->apiKey,
             'q'       => $keyword,
             'sort'    => 'newest',
-            'page'    => 0,
+            'page'    => $page,
         ]);
     }
 
@@ -47,8 +47,8 @@ class NewYorkTimesSource implements INewsSource
         $description = $data["abstract"] ?? $data["snippet"] ?? "";
         $author      = $data["byline"]["original"] ?? "";
         $url         = $data["web_url"] ?? "";
-        $category    = $data["news_desk"] ?? $data["section_name"] ?? "";
         $source      = Sources::NEW_YORK_TIMES;
+        $category    = $data["news_desk"] ?? $data["section_name"] ?? "";
         return new NewsEntity(
             $title,
             $description,

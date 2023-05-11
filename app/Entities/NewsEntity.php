@@ -13,6 +13,7 @@ class NewsEntity implements JsonSerializable
         private string $url,
         private string $source,
         private string $category,
+        private string $thumbnail = "",
     ) {
     }
 
@@ -46,15 +47,21 @@ class NewsEntity implements JsonSerializable
         return $this->category;
     }
 
+    public function getThumbnail(): string
+    {
+        return $this->thumbnail;
+    }
+
     public function jsonSerialize()
     {
         return [
-            'title' => $this->title,
+            'title'       => $this->title,
             'description' => $this->description,
-            'author' => $this->author,
-            'url' => $this->url,
-            'source' => $this->source,
-            'category' => $this->category,
+            'author'      => $this->author,
+            'url'         => $this->url,
+            'source'      => $this->source,
+            'category'    => $this->category,
+            'thumbnail'   => $this->thumbnail,
         ];
     }
 }

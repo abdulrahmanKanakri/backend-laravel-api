@@ -11,12 +11,12 @@ class AggregatedSources implements INewsSource
         $this->sources = $sources;
     }
 
-    public function fetchNewsList(string $keyword = ''): array
+    public function fetchNewsList(string $keyword = '', int $page = 0): array
     {
         $news = [];
 
         foreach ($this->sources as $source) {
-            array_push($news, ...$source->fetchNewsList($keyword));
+            array_push($news, ...$source->fetchNewsList($keyword, $page));
         }
 
         return $news;

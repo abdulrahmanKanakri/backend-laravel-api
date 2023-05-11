@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\News\AggregatedSources;
 use App\Services\News\INewsSource;
 use App\Services\News\NewYorkTimesSource;
+use App\Services\News\TheGuardianSource;
 use App\Services\User\CurrentUserService;
 use App\Services\User\ICurrentUserService;
 use App\Services\User\IUserService;
@@ -34,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
                 new NewYorkTimesSource(
                     env("NEW_YORK_TIMES_ENDPOINT"),
                     env("NEW_YORK_TIMES_API_KEY")
+                ),
+                new TheGuardianSource(
+                    env("THE_GUARDIAN_ENDPOINT"),
+                    env("THE_GUARDIAN_API_KEY")
                 )
             );
         });
