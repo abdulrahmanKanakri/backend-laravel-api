@@ -47,15 +47,17 @@ class NewYorkTimesSource implements INewsSource
         $description = $data["abstract"] ?? $data["snippet"] ?? "";
         $author      = $data["byline"]["original"] ?? "";
         $url         = $data["web_url"] ?? "";
-        $source      = Sources::NEW_YORK_TIMES;
         $category    = $data["news_desk"] ?? $data["section_name"] ?? "";
+        $publishedAt = $data["pub_date"] ?? "";
+        $source      = Sources::NEW_YORK_TIMES;
         return new NewsEntity(
             $title,
             $description,
             $author,
             $url,
             $source,
-            $category
+            $category,
+            $publishedAt,
         );
     }
 }

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\News\AggregatedSources;
 use App\Services\News\INewsSource;
+use App\Services\News\BBCNewsSource;
+use App\Services\News\CBCNewsSource;
 use App\Services\News\NewYorkTimesSource;
 use App\Services\News\TheGuardianSource;
 use App\Services\User\CurrentUserService;
@@ -39,6 +41,14 @@ class AppServiceProvider extends ServiceProvider
                 new TheGuardianSource(
                     env("THE_GUARDIAN_ENDPOINT"),
                     env("THE_GUARDIAN_API_KEY")
+                ),
+                new BBCNewsSource(
+                    env("NEWSAPI_ENDPOINT"),
+                    env("NEWSAPI_API_KEY")
+                ),
+                new CBCNewsSource(
+                    env("NEWSAPI_ENDPOINT"),
+                    env("NEWSAPI_API_KEY")
                 )
             );
         });
