@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\NewsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,8 +23,13 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    // Auth
     Route::get('/me', function (Request $request) {
         return $request->user();
     });
     Route::post('logout', [LogoutController::class, 'logout']);
+
+    // News
+    Route::get('news', [NewsController::class, 'index']);
 });

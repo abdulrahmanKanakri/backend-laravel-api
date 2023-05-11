@@ -50,7 +50,9 @@ class User extends Authenticatable
 
     public function deleteCurrentToken(): void
     {
-        $this->currentAccessToken()->delete();
+        /** @var \Laravel\Sanctum\PersonalAccessToken $currentAccessToken */
+        $currentAccessToken = $this->currentAccessToken();
+        $currentAccessToken->delete();
     }
 
     public function deleteAllTokens(): void
