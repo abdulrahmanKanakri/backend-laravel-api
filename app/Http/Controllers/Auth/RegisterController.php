@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\DTO\UserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
+use App\Services\User\IUserService;
 use App\Utils\ApiResponse;
-use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
+    public function __construct(private IUserService $userService)
+    {
+    }
+
     public function register(RegisterRequest $request)
     {
-        /** @var User $user */
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $userDTO = new UserDTO(
+            $request->input('name'),
+            $request->input('email'),
+            $request->input('password')
+        );
+
+        $user = $this->userService->createUser($userDTO);
 
         $data = [
             'user' => $user,
-            'token' => $user->generateToken()
+            'token' => $user->generateToken($request->userAgent())
         ];
 
         return ApiResponse::success($data, 'Successfully registered');

@@ -42,12 +42,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function generateToken(): string
+    public function generateToken(string $userAgent): string
     {
-        return $this->createToken($this->email)->plainTextToken;
+        $name = $this->email . '-' . $userAgent;
+        return $this->createToken($name)->plainTextToken;
     }
 
-    public function deleteTokens(): void
+    public function deleteCurrentToken(): void
+    {
+        $this->currentAccessToken()->delete();
+    }
+
+    public function deleteAllTokens(): void
     {
         $this->tokens()->delete();
     }
