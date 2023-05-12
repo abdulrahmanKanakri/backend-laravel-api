@@ -31,7 +31,8 @@ class TheGuardianSource implements INewsSource
             'api-key'     => $this->apiKey,
             'q'           => $keyword,
             'page'        => $page,
-            'show-fields' => 'byline,trailText,thumbnail'
+            'show-fields' => 'byline,trailText,thumbnail',
+            'section'     => 'football'
         ]);
     }
 

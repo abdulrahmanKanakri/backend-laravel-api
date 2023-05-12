@@ -16,10 +16,10 @@ class SourceSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('sources')->insert([
-            ['name' => Sources::BBC_NEWS],
-            ['name' => Sources::NEW_YORK_TIMES],
-            ['name' => Sources::THE_GUARDIAN],
-        ]);
+        $sources = array_values(Sources::getConstants());
+
+        DB::table('sources')->insert(array_map(function ($s) {
+            return ['name' => $s];
+        }, $sources));
     }
 }

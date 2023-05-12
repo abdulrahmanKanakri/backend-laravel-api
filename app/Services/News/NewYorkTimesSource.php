@@ -27,10 +27,13 @@ class NewYorkTimesSource implements INewsSource
     private function handleRequest(string $keyword = '', int $page = 0)
     {
         return Http::get($this->endpoint, [
-            'api-key' => $this->apiKey,
-            'q'       => $keyword,
-            'sort'    => 'newest',
-            'page'    => $page,
+            'api-key'      => $this->apiKey,
+            'q'            => $keyword,
+            'sort'         => 'newest',
+            'page'         => $page,
+            'facet_filter' => true,
+            'facet_fields' => 'section_name',
+            'fq'           => 'Sports', // category
         ]);
     }
 
@@ -47,8 +50,9 @@ class NewYorkTimesSource implements INewsSource
         $description = $data["abstract"] ?? $data["snippet"] ?? "";
         $author      = $data["byline"]["original"] ?? "";
         $url         = $data["web_url"] ?? "";
-        $category    = $data["news_desk"] ?? $data["section_name"] ?? "";
+        $category    = $data["section_name"] ?? $data["subsection_name"] ?? $data["news_desk"] ?? "";
         $publishedAt = $data["pub_date"] ?? "";
+        $thumbnail   = $this->extractThumbnail($data["multimedia"][0]["url"] ?? "");
         $source      = Sources::NEW_YORK_TIMES;
         return new NewsEntity(
             $title,
@@ -58,6 +62,12 @@ class NewYorkTimesSource implements INewsSource
             $source,
             $category,
             $publishedAt,
+            $thumbnail
         );
+    }
+
+    private function extractThumbnail(string $path): string
+    {
+        return $path ? 'https://static01.nyt.com/' . $path : "";
     }
 }
