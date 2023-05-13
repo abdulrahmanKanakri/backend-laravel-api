@@ -18,8 +18,6 @@ class SourceSeeder extends Seeder
     {
         $sources = array_values(Sources::getConstants());
 
-        DB::table('sources')->insert(array_map(function ($s) {
-            return ['name' => $s];
-        }, $sources));
+        DB::table('sources')->insert(array_map(fn ($source) => ['name' => $source], $sources));
     }
 }

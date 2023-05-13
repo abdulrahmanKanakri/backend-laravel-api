@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-class LoginRequest extends ApiRequest
+use App\Http\Requests\ApiRequest;
+
+class UpdatePreferredCategoriesRequest extends ApiRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,8 +14,8 @@ class LoginRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'categories_ids' => 'required|array',
+            'categories_ids.*' => 'required|numeric',
         ];
     }
 }

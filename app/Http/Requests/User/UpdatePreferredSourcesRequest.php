@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
-class LoginRequest extends ApiRequest
+use App\Http\Requests\ApiRequest;
+
+class UpdatePreferredSourcesRequest extends ApiRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,8 +14,8 @@ class LoginRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'sources_ids' => 'required|array',
+            'sources_ids.*' => 'required|numeric',
         ];
     }
 }

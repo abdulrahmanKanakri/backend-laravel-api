@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Categories;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,24 +14,8 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
-            'Technology',
-            'Movies',
-            'Health',
-            'Food',
-            'Music',
-            'Science',
-            'Books',
-            'Travel',
-            'Business',
-            'History',
-            'Sports',
-            'Arts',
-            'World',
-        ];
+        $categories = array_values(Categories::getConstants());
 
-        DB::table('categories')->insert(array_map(function ($c) {
-            return ['name' => $c];
-        }, $categories));
+        DB::table('categories')->insert(array_map(fn ($category) => ['name' => $category], $categories));
     }
 }

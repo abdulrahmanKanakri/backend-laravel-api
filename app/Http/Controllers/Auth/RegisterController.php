@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\DTO\UserDTO;
+use App\DTO\CreateUserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Services\User\IUserService;
@@ -16,7 +16,7 @@ class RegisterController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $userDTO = new UserDTO(
+        $userDTO = new CreateUserDTO(
             $request->input('name'),
             $request->input('email'),
             $request->input('password')

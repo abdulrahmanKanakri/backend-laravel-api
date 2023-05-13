@@ -3,8 +3,10 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\NewsController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\User\UserPreferencesController;
+use App\Http\Controllers\User\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,11 +27,23 @@ Route::post('login', [LoginController::class, 'login']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Auth
-    Route::get('/me', function (Request $request) {
-        return $request->user();
-    });
+    Route::post('me', [UserController::class, 'me']);
     Route::post('logout', [LogoutController::class, 'logout']);
+
+    // User profile
+    Route::group(['prefix' => 'profile'], function () {
+
+        // Preferences
+        Route::put('preferred-sources', [UserPreferencesController::class, 'updatePreferredSources']);
+        Route::put('preferred-categories', [UserPreferencesController::class, 'updatePreferredCategories']);
+        Route::put('preferred-authors', [UserPreferencesController::class, 'updatePreferredAuthors']);
+
+        // Settings
+        Route::put('update-settings', [UserSettingsController::class, 'updateUserSettings']);
+    });
 
     // News
     Route::get('news', [NewsController::class, 'index']);
 });
+
+// Route::get('news', [NewsController::class, 'index']);
