@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\News;
+namespace App\Services\Source;
 
 use App\Entities\NewsEntity;
 

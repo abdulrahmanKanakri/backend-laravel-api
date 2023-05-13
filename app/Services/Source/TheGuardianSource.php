@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\News;
+namespace App\Services\Source;
 
 use App\Entities\NewsEntity;
 use App\Enums\Sources;
 use Illuminate\Support\Facades\Http;
 
-class CBCNewsSource implements INewsSource
+class TheGuardianSource implements INewsSource
 {
     public function __construct(private string $endpoint, private string $apiKey)
     {
@@ -14,12 +14,12 @@ class CBCNewsSource implements INewsSource
 
     public function fetchNewsList(string $keyword = '', int $page = 0): array
     {
-        // here we add 1 to $page because ABC News starts the pagination from page 1 not 0
+        // here we add 1 to $page because The Guardian starts the pagination from page 1 not 0
         $response = $this->handleRequest($keyword, $page + 1);
 
         if ($response->ok()) {
-            $articles = $response->json()["articles"] ?? [];
-            return $this->mapToNews($articles);
+            $results = $response->json()["response"]["results"] ?? [];
+            return $this->mapToNews($results);
         }
 
         return [];
@@ -28,11 +28,11 @@ class CBCNewsSource implements INewsSource
     private function handleRequest(string $keyword = '', int $page = 1)
     {
         return Http::get($this->endpoint, [
-            'apiKey'   => $this->apiKey,
-            'q'        => $keyword,
-            'page'     => $page,
-            'pageSize' => 10,
-            'sources'  => 'cbc-news'
+            'api-key'     => $this->apiKey,
+            'q'           => $keyword,
+            'page'        => $page,
+            'show-fields' => 'byline,trailText,thumbnail',
+            'section'     => 'football'
         ]);
     }
 
@@ -45,14 +45,14 @@ class CBCNewsSource implements INewsSource
 
     private function mapObjectToNews(mixed $data): NewsEntity
     {
-        $title       = $data["title"] ?? "";
-        $description = $data["description"] ?? "";
-        $author      = $data["author"] ?? "";
-        $url         = $data["url"] ?? "";
-        $category    = $data["category"] ?? "";
-        $publishedAt = $data["publishedAt"] ?? "";
-        $thumbnail   = $data["urlToImage"] ?? "";
-        $source      = Sources::CBC_NEWS;
+        $title       = $data["webTitle"] ?? "";
+        $description = $data["fields"]["trailText"] ?? "";
+        $author      = $data["fields"]["byline"] ?? "";
+        $url         = $data["webUrl"] ?? "";
+        $category    = $data["sectionName"] ?? "";
+        $publishedAt = $data["webPublicationDate"] ?? "";
+        $thumbnail   = $data["fields"]["thumbnail"] ?? "";
+        $source      = Sources::THE_GUARDIAN;
         return new NewsEntity(
             $title,
             $description,
