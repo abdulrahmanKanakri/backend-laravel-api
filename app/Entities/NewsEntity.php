@@ -2,73 +2,17 @@
 
 namespace App\Entities;
 
-use JsonSerializable;
-
-class NewsEntity implements JsonSerializable
+class NewsEntity
 {
     public function __construct(
-        private string $title,
-        private string $description,
-        private string $author,
-        private string $url,
-        private string $source,
-        private string $category,
-        private string $publishedAt,
-        private string $thumbnail = "",
+        public readonly string $title,
+        public readonly string $description,
+        public readonly string $author,
+        public readonly string $url,
+        public readonly string $source,
+        public readonly string $category,
+        public readonly string $publishedAt,
+        public readonly string $thumbnail = "",
     ) {
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function getAuthor(): string
-    {
-        return $this->author;
-    }
-
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    public function getSource(): string
-    {
-        return $this->source;
-    }
-
-    public function getCategory(): string
-    {
-        return $this->category;
-    }
-
-    public function getPublishedAt(): string
-    {
-        return $this->publishedAt;
-    }
-
-    public function getThumbnail(): string
-    {
-        return $this->thumbnail;
-    }
-
-    public function jsonSerialize()
-    {
-        return [
-            'title'       => $this->title,
-            'description' => $this->description,
-            'author'      => $this->author,
-            'url'         => $this->url,
-            'source'      => $this->source,
-            'category'    => $this->category,
-            'publishedAt' => $this->publishedAt,
-            'thumbnail'   => $this->thumbnail,
-        ];
     }
 }

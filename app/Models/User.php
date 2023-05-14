@@ -66,7 +66,7 @@ class User extends Authenticatable
      */
     public function sources(): BelongsToMany
     {
-        return $this->belongsToMany(Source::class, 'source_user', 'source_id', 'user_id');
+        return $this->belongsToMany(Source::class, 'source_user', 'user_id', 'source_id');
     }
 
     /**
@@ -74,7 +74,7 @@ class User extends Authenticatable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'category_user', 'category_id', 'user_id');
+        return $this->belongsToMany(Category::class, 'category_user', 'user_id', 'category_id');
     }
 
     /**
@@ -82,6 +82,11 @@ class User extends Authenticatable
      */
     public function authors(): BelongsToMany
     {
-        return $this->belongsToMany(Author::class, 'author_user', 'author_id', 'user_id');
+        return $this->belongsToMany(Author::class, 'author_user', 'user_id', 'author_id');
+    }
+
+    public function loadRelations()
+    {
+        return $this->load(['sources', 'categories', 'authors']);
     }
 }

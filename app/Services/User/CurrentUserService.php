@@ -11,4 +11,11 @@ class CurrentUserService implements ICurrentUserService
     {
         return Auth::user();
     }
+
+    public function userWithPreferences(): User
+    {
+        $user = $this->user();
+
+        return $user->loadRelations();
+    }
 }

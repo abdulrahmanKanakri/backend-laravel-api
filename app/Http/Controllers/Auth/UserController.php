@@ -14,7 +14,7 @@ class UserController extends Controller
 
     public function me()
     {
-        $data = ['user' => $this->currentUserService->user()];
+        $data = ['user' => $this->currentUserService->userWithPreferences()];
 
         return ApiResponse::success($data, 'Successfully registered');
     }

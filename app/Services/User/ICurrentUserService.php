@@ -7,4 +7,5 @@ use App\Models\User;
 interface ICurrentUserService
 {
     public function user(): User;
+    public function userWithPreferences(): User;
 }

@@ -23,14 +23,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Auth
 Route::post('register', [RegisterController::class, 'register']);
-
 Route::post('login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Auth
-    Route::post('me', [UserController::class, 'me']);
+    Route::get('me', [UserController::class, 'me']);
     Route::post('logout', [LogoutController::class, 'logout']);
 
     // User profile
