@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
+use App\Http\Requests\ApiRequest;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends ApiRequest

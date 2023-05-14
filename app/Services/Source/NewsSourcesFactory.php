@@ -48,7 +48,8 @@ class NewsSourcesFactory
             case Sources::NEW_YORK_TIMES:
                 return new NewYorkTimesSource(
                     env("NEW_YORK_TIMES_ENDPOINT"),
-                    env("NEW_YORK_TIMES_API_KEY")
+                    env("NEW_YORK_TIMES_API_KEY"),
+                    env("NEW_YORK_TIMES_MEDIA_BASE_URL")
                 );
             case Sources::THE_GUARDIAN:
                 return new TheGuardianSource(

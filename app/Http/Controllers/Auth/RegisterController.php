@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\DTO\CreateUserDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\User\IUserService;
 use App\Utils\ApiResponse;
 

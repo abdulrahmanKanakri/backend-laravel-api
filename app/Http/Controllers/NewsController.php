@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\News\GetNewsListRequest;
 use App\Services\News\INewsService;
 use App\Utils\ApiResponse;
-use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
@@ -12,9 +12,8 @@ class NewsController extends Controller
     {
     }
 
-    public function index(Request $request)
+    public function index(GetNewsListRequest $request)
     {
-        // validate page => positive int
         $keyword = $request->keyword ?? '';
         $page = $request->page ?? 0;
 

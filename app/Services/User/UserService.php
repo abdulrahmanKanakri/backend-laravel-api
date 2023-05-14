@@ -30,6 +30,7 @@ class UserService implements IUserService
 
         if ($userDTO->password) {
             $user->password = Hash::make($userDTO->password);
+            $user->deleteAllTokens();
         }
 
         $user->name = $userDTO->name;

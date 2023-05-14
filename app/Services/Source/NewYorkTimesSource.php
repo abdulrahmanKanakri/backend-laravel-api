@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Http;
 
 class NewYorkTimesSource implements INewsSource
 {
-    public function __construct(private string $endpoint, private string $apiKey)
-    {
+    public function __construct(
+        private string $endpoint,
+        private string $apiKey,
+        private string $mediaBaseURL
+    ) {
     }
 
     public function fetchNewsList(string $keyword = '', int $page = 0): array
@@ -68,6 +71,6 @@ class NewYorkTimesSource implements INewsSource
 
     private function extractThumbnail(string $path): string
     {
-        return $path ? 'https://static01.nyt.com/' . $path : "";
+        return $path ? implode('/', [rtrim($this->mediaBaseURL, '/'), ltrim($path, '/')]) : '';
     }
 }

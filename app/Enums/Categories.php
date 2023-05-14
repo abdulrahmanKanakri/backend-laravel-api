@@ -17,7 +17,7 @@ abstract class Categories extends BaseEnum
     const SPORTS = 'Sports';
     const ARTS = 'Arts';
     const WORLD = 'World';
-    const POLITICAL = 'political';
+    const POLITICAL = 'Political';
 
     /**
      * @return array<string, array<int, string>>
