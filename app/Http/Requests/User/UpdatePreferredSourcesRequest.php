@@ -14,8 +14,8 @@ class UpdatePreferredSourcesRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'sources_ids' => 'required|array',
-            'sources_ids.*' => 'required|numeric',
+            'sources_ids' => 'array',
+            'sources_ids.*' => 'numeric|exists:sources,id',
         ];
     }
 }

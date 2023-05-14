@@ -14,8 +14,8 @@ class UpdatePreferredCategoriesRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'categories_ids' => 'required|array',
-            'categories_ids.*' => 'required|numeric',
+            'categories_ids' => 'array',
+            'categories_ids.*' => 'numeric|exists:categories,id',
         ];
     }
 }

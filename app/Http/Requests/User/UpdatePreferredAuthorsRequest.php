@@ -14,8 +14,8 @@ class UpdatePreferredAuthorsRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'authors_ids' => 'required|array',
-            'authors_ids.*' => 'required|numeric',
+            'authors_ids' => 'array',
+            'authors_ids.*' => 'numeric|exists:authors,id',
         ];
     }
 }
