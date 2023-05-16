@@ -32,7 +32,7 @@ class TheGuardianSource implements INewsSource
             'q'           => $keyword,
             'page'        => $page,
             'show-fields' => 'byline,trailText,thumbnail',
-            'section'     => 'football'
+            // 'section'     => 'football'
         ]);
     }
 

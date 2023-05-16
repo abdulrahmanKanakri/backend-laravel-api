@@ -24,7 +24,6 @@ class RegisterRequest extends ApiRequest
                     ->letters()
                     ->mixedCase()
                     ->numbers()
-                    ->symbols()
             ],
         ];
     }

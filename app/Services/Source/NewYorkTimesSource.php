@@ -34,9 +34,9 @@ class NewYorkTimesSource implements INewsSource
             'q'            => $keyword,
             'sort'         => 'newest',
             'page'         => $page,
-            'facet_filter' => true,
-            'facet_fields' => 'section_name',
-            'fq'           => 'Sports', // category
+            // 'facet_filter' => true,
+            // 'facet_fields' => 'section_name',
+            // 'fq'           => 'Sports', // category
         ]);
     }
 

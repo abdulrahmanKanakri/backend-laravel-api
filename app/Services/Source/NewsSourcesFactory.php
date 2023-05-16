@@ -47,24 +47,24 @@ class NewsSourcesFactory
         switch ($sourceName) {
             case Sources::NEW_YORK_TIMES:
                 return new NewYorkTimesSource(
-                    env("NEW_YORK_TIMES_ENDPOINT"),
-                    env("NEW_YORK_TIMES_API_KEY"),
-                    env("NEW_YORK_TIMES_MEDIA_BASE_URL")
+                    config("services.ny_times.endpoint"),
+                    config("services.ny_times.api_key"),
+                    config("services.ny_times.media_url")
                 );
             case Sources::THE_GUARDIAN:
                 return new TheGuardianSource(
-                    env("THE_GUARDIAN_ENDPOINT"),
-                    env("THE_GUARDIAN_API_KEY")
+                    config("services.the_guardian.endpoint"),
+                    config("services.the_guardian.api_key")
                 );
             case Sources::BBC_NEWS:
                 return new BBCNewsSource(
-                    env("NEWSAPI_ENDPOINT"),
-                    env("NEWSAPI_API_KEY")
+                    config("services.news_api.endpoint"),
+                    config("services.news_api.api_key")
                 );
             case Sources::CBC_NEWS:
                 return new CBCNewsSource(
-                    env("NEWSAPI_ENDPOINT"),
-                    env("NEWSAPI_API_KEY")
+                    config("services.news_api.endpoint"),
+                    config("services.news_api.api_key")
                 );
             default:
                 return null;
