@@ -17,8 +17,9 @@ class UpdateUserSettingsRequest extends ApiRequest
         return [
             'name' => ['required', 'string'],
             'password' => [
+                'nullable',
                 'confirmed',
-                Password::min(8)->letters()->mixedCase()->numbers()->symbols()
+                Password::min(8)->letters()->mixedCase()->numbers()
             ],
         ];
     }
