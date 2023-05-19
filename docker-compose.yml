@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: Database
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=backend_laravel_api
+    volumes:
+      - db:/var/lib/mysql
+
+  app:
+    container_name: Laravel
+    build: .
+    command: sh -c "php artisan migrate:refresh --seed --force && php artisan serve --host=0.0.0.0 --port=8001"
+    ports:
+      - 8001:8001
+    environment:
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=backend_laravel_api
+      - DB_USERNAME=root
+      - DB_PASSWORD=my-secret-pw
+    restart: on-failure
+    depends_on:
+      - db
+
+volumes:
+  db:
+    driver: local
