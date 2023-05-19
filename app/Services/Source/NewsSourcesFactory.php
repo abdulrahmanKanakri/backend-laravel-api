@@ -4,6 +4,7 @@ namespace App\Services\Source;
 
 use App\Enums\Sources;
 use App\Services\User\ICurrentUserService;
+use stdClass;
 
 class NewsSourcesFactory
 {
@@ -13,7 +14,7 @@ class NewsSourcesFactory
 
     public function create(): INewsSource
     {
-        $sources = $this->currentUserService->user()->sources;
+        $sources = $this->getUserSources();
 
         $newsSources = $this->getNewsSources($sources);
 
@@ -22,6 +23,26 @@ class NewsSourcesFactory
         }
 
         return new AggregatedSources(...$newsSources);
+    }
+
+    private function getUserSources()
+    {
+        $sources = $this->currentUserService->user()->sources;
+
+        return count($sources) > 0 ? $sources : $this->getDefaultSources();
+    }
+
+    private function getDefaultSources()
+    {
+        $sources = [];
+
+        foreach (Sources::getConstants() as $name) {
+            $source = new stdClass();
+            $source->name = $name;
+            array_push($sources, $source);
+        }
+
+        return $sources;
     }
 
     /**
