@@ -18,11 +18,19 @@ class NewsSourcesFactory
 
         $newsSources = $this->getNewsSources($sources);
 
-        if (count($newsSources) == 1) {
-            return $newsSources[0];
-        }
+        return $this->handleNewsSourcesCount($newsSources);
+    }
 
-        return new AggregatedSources(...$newsSources);
+    /**
+     * @param array<int, string> $sourcesList
+     */
+    public function createFromList(array $sourcesList): INewsSource
+    {
+        $sources = $this->mapSourcesList($sourcesList);
+
+        $newsSources = $this->getNewsSources($sources);
+
+        return $this->handleNewsSourcesCount($newsSources);
     }
 
     private function getUserSources()
@@ -34,15 +42,26 @@ class NewsSourcesFactory
 
     private function getDefaultSources()
     {
+        return $this->mapSourcesList(Sources::getConstants());
+    }
+
+    private function mapSourcesList(array $sourcesList)
+    {
         $sources = [];
 
-        foreach (Sources::getConstants() as $name) {
-            $source = new stdClass();
-            $source->name = $name;
+        foreach ($sourcesList as $name) {
+            $source = $this->mapSourceToObject($name);
             array_push($sources, $source);
         }
 
         return $sources;
+    }
+
+    private function mapSourceToObject(string $name)
+    {
+        $source = new stdClass();
+        $source->name = $name;
+        return $source;
     }
 
     /**
@@ -90,5 +109,17 @@ class NewsSourcesFactory
             default:
                 return null;
         }
+    }
+
+    /**
+     * @param array<int, INewsSource> $newsSources
+     */
+    private function handleNewsSourcesCount(array $newsSources): INewsSource
+    {
+        if (count($newsSources) == 1) {
+            return $newsSources[0];
+        }
+
+        return new AggregatedSources(...$newsSources);
     }
 }
