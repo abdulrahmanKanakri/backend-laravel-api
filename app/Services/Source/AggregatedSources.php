@@ -11,12 +11,12 @@ class AggregatedSources implements INewsSource
         $this->sources = $sources;
     }
 
-    public function fetchNewsList(string $keyword = '', int $page = 0): array
+    public function fetchNewsList(array $filters): array
     {
         $news = collect([]);
 
         foreach ($this->sources as $source) {
-            $news->push(...$source->fetchNewsList($keyword, $page));
+            $news->push(...$source->fetchNewsList($filters));
         }
 
         return $news->sortByDesc("publishedAt")->values()->all();

@@ -37,12 +37,7 @@ abstract class Categories extends BaseEnum
                 ];
             case Sources::THE_GUARDIAN:
                 return [
-                    Categories::TECHNOLOGY => [
-                        'technology', 'working-in-development', 'teacher-network',
-                        'enterprise-network', 'games', 'global-development',
-                        'global-development-professionals-network',
-                        'government-computing-network', 'housing-network'
-                    ],
+                    Categories::TECHNOLOGY => ['technology'],
                     Categories::MOVIES => ['film'],
                     Categories::HEALTH => ['healthcare-network', 'social-care-network'],
                     Categories::FOOD => ['food'],
@@ -50,15 +45,12 @@ abstract class Categories extends BaseEnum
                     Categories::SCIENCE => ['science'],
                     Categories::BOOKS => ['books', 'childrens-books-site'],
                     Categories::TRAVEL => ['travel', 'travel/offers'],
-                    Categories::BUSINESS => ['money', 'small-business-network', 'better-business', 'business', 'business-to-business'],
+                    Categories::BUSINESS => ['business'],
                     Categories::HISTORY => ['culture', 'culture-network', 'culture-professionals-network'],
                     Categories::SPORTS => ['sport', 'football'],
                     Categories::ARTS => ['artanddesign', 'fashion', 'lifeandstyle'],
-                    Categories::WORLD => [
-                        'world', 'weather', 'animals-farmed', 'inequality',
-                        'uk-news', 'us-news', 'australia-news', 'theguardian'
-                    ],
-                    Categories::POLITICAL => ['news', 'politics', 'public-leaders-network', 'law'],
+                    Categories::WORLD => ['world'],
+                    Categories::POLITICAL => ['politics', 'public-leaders-network', 'law'],
                 ];
             case Sources::BBC_NEWS:
                 return [

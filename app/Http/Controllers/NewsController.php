@@ -14,10 +14,7 @@ class NewsController extends Controller
 
     public function index(GetNewsListRequest $request)
     {
-        $keyword = $request->keyword ?? '';
-        $page = $request->page ?? 0;
-
-        $news = $this->newsService->fetchNewsList($keyword, $page);
+        $news = $this->newsService->fetchNewsList($request->all());
 
         return ApiResponse::success($news, 'Successfully retrieved');
     }

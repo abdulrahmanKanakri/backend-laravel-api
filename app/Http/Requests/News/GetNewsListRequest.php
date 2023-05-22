@@ -14,11 +14,12 @@ class GetNewsListRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'keyword' => 'string',
-            'page' => 'numeric|min:0',
-            'sources' => 'array',
-            'categories' => 'array',
-            'authors' => 'array',
+            'keyword' => 'nullable|string',
+            'page' => 'nullable|numeric|min:0',
+            'source' => 'nullable|string',
+            'category' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
         ];
     }
 }

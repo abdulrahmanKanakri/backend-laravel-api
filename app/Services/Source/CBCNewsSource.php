@@ -3,8 +3,11 @@
 namespace App\Services\Source;
 
 use App\Entities\NewsEntity;
+use App\Enums\Categories;
 use App\Enums\Sources;
+use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CBCNewsSource implements INewsSource
 {
@@ -12,35 +15,49 @@ class CBCNewsSource implements INewsSource
     {
     }
 
-    public function fetchNewsList(string $keyword = '', int $page = 0): array
+    public function fetchNewsList(array $filters): array
     {
-        // here we add 1 to $page because ABC News starts the pagination from page 1 not 0
-        $response = $this->handleRequest($keyword, $page + 1);
+        $data = $this->handleRequest($filters);
 
-        if ($response->ok()) {
-            $articles = $response->json()["articles"] ?? [];
-            return $this->mapToNews($articles);
+        return $this->mapToNews($data);
+    }
+
+    private function handleRequest(array $filters)
+    {
+        try {
+            $params = $this->handleRequestParams($filters);
+
+            $response = Http::get($this->endpoint, $params);
+
+            if ($response->ok()) {
+                return $response->json()["articles"];
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return [];
     }
 
-    private function handleRequest(string $keyword = '', int $page = 1)
+    private function handleRequestParams(array $filters)
     {
-        return Http::get($this->endpoint, [
+        if (isset($filters['category'])) {
+            $categories = Categories::getSourceCategories(Sources::CBC_NEWS);
+            $filters['category'] = $categories[$filters['category']][0] ?? '';
+        }
+
+        return collect([
             'apiKey'   => $this->apiKey,
-            'q'        => $keyword,
-            'page'     => $page,
-            'pageSize' => 10,
+            'q'        => $filters['keyword'] ?? '',
+            'page'     => $filters['page'] ??  1,
+            'pageSize' => 5,
             'sources'  => 'cbc-news'
-        ]);
+        ])->filter()->all();
     }
 
     private function mapToNews(array $news)
     {
-        return array_map(function ($v) {
-            return $this->mapObjectToNews($v);
-        }, $news);
+        return array_map(fn ($v) => $this->mapObjectToNews($v), $news);
     }
 
     private function mapObjectToNews(mixed $data): NewsEntity

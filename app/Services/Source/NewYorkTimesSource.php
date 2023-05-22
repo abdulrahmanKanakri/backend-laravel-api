@@ -3,8 +3,11 @@
 namespace App\Services\Source;
 
 use App\Entities\NewsEntity;
+use App\Enums\Categories;
 use App\Enums\Sources;
+use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class NewYorkTimesSource implements INewsSource
 {
@@ -15,36 +18,53 @@ class NewYorkTimesSource implements INewsSource
     ) {
     }
 
-    public function fetchNewsList(string $keyword = '', int $page = 0): array
+    public function fetchNewsList(array $filters): array
     {
-        $response = $this->handleRequest($keyword, $page);
+        $data = $this->handleRequest($filters);
 
-        if ($response->ok()) {
-            $docs = $response->json()["response"]["docs"] ?? [];
-            return $this->mapToNews($docs);
+        return $this->mapToNews($data);
+    }
+
+    private function handleRequest(array $filters)
+    {
+        try {
+            $params = $this->handleRequestParams($filters);
+
+            $response = Http::get($this->endpoint, $params);
+
+            if ($response->ok()) {
+                return $response->json()["response"]["docs"];
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
         }
 
         return [];
     }
 
-    private function handleRequest(string $keyword = '', int $page = 0)
+    private function handleRequestParams(array $filters)
     {
-        return Http::get($this->endpoint, [
+        $categoryFilters = [];
+        if (isset($filters['category'])) {
+            $categories = Categories::getSourceCategories(Sources::NEW_YORK_TIMES);
+            $categoryFilters = [
+                'facet_filter' => true,
+                'facet_fields' => 'section_name',
+                'fq'           =>  $categories[$filters['category']][0] ?? '',
+            ];
+        }
+
+        return collect([
             'api-key'      => $this->apiKey,
-            'q'            => $keyword,
+            'q'            => $filters['keyword'] ?? '',
+            'page'         => $filters['page'] ?? 1,
             'sort'         => 'newest',
-            'page'         => $page,
-            // 'facet_filter' => true,
-            // 'facet_fields' => 'section_name',
-            // 'fq'           => 'Sports', // category
-        ]);
+        ])->merge($categoryFilters)->filter()->all();
     }
 
     private function mapToNews(array $news)
     {
-        return array_map(function ($v) {
-            return $this->mapObjectToNews($v);
-        }, $news);
+        return array_map(fn ($v) => $this->mapObjectToNews($v), $news);
     }
 
     private function mapObjectToNews(mixed $data): NewsEntity

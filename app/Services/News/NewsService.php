@@ -10,9 +10,9 @@ class NewsService implements INewsService
     {
     }
 
-    public function fetchNewsList(string $keyword = "", int $page = 0): array
+    public function fetchNewsList(array $filters): array
     {
         $newsSource = $this->newsSourcesFactory->create();
-        return $newsSource->fetchNewsList($keyword, $page);
+        return $newsSource->fetchNewsList($filters);
     }
 }
