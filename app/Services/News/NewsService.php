@@ -14,7 +14,7 @@ class NewsService implements INewsService
 
     public function fetchNewsList(array $filters): array
     {
-        $newsSource = $this->getNewsSource($filters["source"]);
+        $newsSource = $this->getNewsSource($filters["source"] ?? '');
         return $newsSource->fetchNewsList($filters);
     }
 
