@@ -3,6 +3,10 @@
 namespace App\Services\Source;
 
 use App\Enums\Sources;
+use App\Mappers\News\BBCNewsMapper;
+use App\Mappers\News\CBCNewsMapper;
+use App\Mappers\News\NewYorkTimesNewsMapper;
+use App\Mappers\News\TheGuardianNewsMapper;
 use App\Services\User\ICurrentUserService;
 use stdClass;
 
@@ -18,7 +22,7 @@ class NewsSourcesFactory
 
         $newsSources = $this->getNewsSources($sources);
 
-        return $this->handleNewsSourcesCount($newsSources);
+        return $this->getNewsSourcesAccordingToCount($newsSources);
     }
 
     /**
@@ -30,7 +34,7 @@ class NewsSourcesFactory
 
         $newsSources = $this->getNewsSources($sources);
 
-        return $this->handleNewsSourcesCount($newsSources);
+        return $this->getNewsSourcesAccordingToCount($newsSources);
     }
 
     private function getUserSources()
@@ -89,22 +93,25 @@ class NewsSourcesFactory
                 return new NewYorkTimesSource(
                     config("services.ny_times.endpoint"),
                     config("services.ny_times.api_key"),
-                    config("services.ny_times.media_url")
+                    new NewYorkTimesNewsMapper(config("services.ny_times.media_url"))
                 );
             case Sources::THE_GUARDIAN:
                 return new TheGuardianSource(
                     config("services.the_guardian.endpoint"),
-                    config("services.the_guardian.api_key")
+                    config("services.the_guardian.api_key"),
+                    new TheGuardianNewsMapper(),
                 );
             case Sources::BBC_NEWS:
                 return new BBCNewsSource(
                     config("services.news_api.endpoint"),
-                    config("services.news_api.api_key")
+                    config("services.news_api.api_key"),
+                    new BBCNewsMapper(),
                 );
             case Sources::CBC_NEWS:
                 return new CBCNewsSource(
                     config("services.news_api.endpoint"),
-                    config("services.news_api.api_key")
+                    config("services.news_api.api_key"),
+                    new CBCNewsMapper(),
                 );
             default:
                 return null;
@@ -114,7 +121,7 @@ class NewsSourcesFactory
     /**
      * @param array<int, INewsSource> $newsSources
      */
-    private function handleNewsSourcesCount(array $newsSources): INewsSource
+    private function getNewsSourcesAccordingToCount(array $newsSources): INewsSource
     {
         if (count($newsSources) == 1) {
             return $newsSources[0];
